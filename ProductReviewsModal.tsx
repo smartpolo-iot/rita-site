@@ -10,12 +10,12 @@ interface Props {
 }
 
 const ProductReviewsModal: React.FC<Props> = ({ item, lang, onClose }) => {
-  const t = TRANSLATIONS[lang];
+  const t = TRANSLATIONS[lang as Language];
 
   // Filter reviews for this item
   const productReviews = useMemo(() => {
     // Attempt to match by name or by group/category
-    return MOCK_REVIEWS.filter(r =>
+    return MOCK_REVIEWS.filter((r: Review) =>
       (r.itemName && r.itemName.toUpperCase() === item.name.toUpperCase()) ||
       (r.itemName && r.itemName.toUpperCase() === item.grupo.toUpperCase()) ||
       (r.itemName && r.itemName.toUpperCase() === item.category.toUpperCase())
@@ -23,7 +23,7 @@ const ProductReviewsModal: React.FC<Props> = ({ item, lang, onClose }) => {
   }, [item]);
 
   // If no specific reviews, generate some placeholder content based on the item's rating
-  const reviewsToDisplay = productReviews.length > 0 ? productReviews : [
+  const reviewsToDisplay: (Review | any)[] = productReviews.length > 0 ? productReviews : [
     {
       id: 'placeholder-1',
       author: lang === 'es' ? 'Cliente RITA' : 'RITA Customer',
@@ -68,7 +68,7 @@ const ProductReviewsModal: React.FC<Props> = ({ item, lang, onClose }) => {
 
         {/* Scrollable Reviews List */}
         <div className="max-h-[60vh] overflow-y-auto p-6 space-y-4">
-          {reviewsToDisplay.map((r) => (
+          {reviewsToDisplay.map((r: Review) => (
             <div key={r.id} className="p-4 bg-white/40 border border-[#39322c]/10">
               <div className="flex justify-between items-start mb-2">
                 <div>

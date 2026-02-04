@@ -101,7 +101,7 @@ const App: React.FC = () => {
     window.location.href = MENU_URL;
   };
 
-  const t = TRANSLATIONS[lang];
+  const t = TRANSLATIONS[lang as Language];
 
   const NavButton = ({ id, label, onClick }: { id: string, label: string, onClick: () => void }) => {
     const isActive = activeSection === id;
@@ -182,7 +182,7 @@ const App: React.FC = () => {
       {/* Main Content */}
       <div className="flex-grow w-full pt-[104px] lg:pt-[80px]">
         <div className="animate-in fade-in duration-700">
-          {/* Hero - Corrected URL ID from 8505 to 8605 */}
+          {/* Hero */}
           <section
             id="home"
             ref={homeRef}

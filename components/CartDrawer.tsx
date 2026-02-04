@@ -13,7 +13,7 @@ interface Props {
 }
 
 const CartDrawer: React.FC<Props> = ({ items, lang, onUpdateQuantity, onClose, onCheckout }) => {
-  const t = TRANSLATIONS[lang];
+  const t = TRANSLATIONS[lang as Language];
   // Fix: Parse string price to number for calculation by removing thousand separators and converting decimal comma
   const total = items.reduce((sum, item) => {
     const numericPrice = parseFloat(item.price.replace(/\./g, '').replace(',', '.')) || 0;
@@ -40,7 +40,6 @@ const CartDrawer: React.FC<Props> = ({ items, lang, onUpdateQuantity, onClose, o
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex-1">
                     <h4 className="font-condensed font-bold text-2xl text-gray-800 uppercase tracking-tight leading-none mb-1">{item.name}</h4>
-                    {/* Fix: item.price is a string; display it directly with currency prefix if it's numeric */}
                     <p className="text-teal-600 font-bold text-xl">
                       {/^[0-9., ]+$/.test(item.price) ? `${t.currency} ${item.price}` : item.price}
                     </p>

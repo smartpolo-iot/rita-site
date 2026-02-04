@@ -12,7 +12,7 @@ interface Props {
 const STORAGE_KEY = 'rita_custom_reviews';
 
 const ReviewsModal: React.FC<Props> = ({ lang, onClose, menuItems }) => {
-  const t = TRANSLATIONS[lang];
+  const t = TRANSLATIONS[lang as Language];
   const [reviews, setReviews] = useState<Review[]>(MOCK_REVIEWS);
   const [showForm, setShowForm] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -290,7 +290,7 @@ const ReviewsModal: React.FC<Props> = ({ lang, onClose, menuItems }) => {
             </h4>
 
             <div className="space-y-4 pb-12">
-              {reviews.map((r) => (
+              {reviews.map((r: Review) => (
                 <div key={r.id} className="p-6 bg-transparent border border-white/60 backdrop-blur-[2px] relative animate-in fade-in slide-in-from-bottom-2 duration-500">
                   <div className="flex justify-between items-start mb-4">
                     <div>

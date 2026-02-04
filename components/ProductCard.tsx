@@ -40,10 +40,9 @@ const renderFormattedText = (text: string) => {
 };
 
 const ProductCard: React.FC<Props> = ({ item, lang, onViewReviews }) => {
-  const t = TRANSLATIONS[lang];
+  const t = TRANSLATIONS[lang as Language];
 
   return (
-    /* Changed border-white/60 to border-[#39322c]/15 to match the font color and maintain 2px thickness */
     <div className={`relative p-6 flex flex-col border-b-2 border-[#39322c]/15 transition-all ${!item.available ? 'opacity-40' : ''}`}>
 
       {item.label && (
