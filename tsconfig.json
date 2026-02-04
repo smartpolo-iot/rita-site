@@ -14,23 +14,17 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": ".",
     "types": [
       "vite/client"
     ]
   },
   "include": [
-    "App.tsx",
-    "index.tsx",
-    "types.ts",
-    "constants.ts",
-    "components/**/*",
-    "services/**/*"
+    "**/*"
   ],
   "exclude": [
     "node_modules",
