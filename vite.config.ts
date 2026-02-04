@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   define: {
+    // @ts-ignore
     'process.env': 'process.env'
   }
 });
