@@ -13,7 +13,7 @@ interface Props {
 }
 
 const CartDrawer: React.FC<Props> = ({ items, lang, onUpdateQuantity, onClose, onCheckout }) => {
-  const t = TRANSLATIONS[lang as Language];
+  const t = TRANSLATIONS[lang as keyof typeof TRANSLATIONS];
   // Fix: Parse string price to number for calculation by removing thousand separators and converting decimal comma
   const total = items.reduce((sum, item) => {
     const numericPrice = parseFloat(item.price.replace(/\./g, '').replace(',', '.')) || 0;

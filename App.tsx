@@ -101,7 +101,8 @@ const App: React.FC = () => {
     window.location.href = MENU_URL;
   };
 
-  const t = TRANSLATIONS[lang as Language];
+  // Type-safe access to translations
+  const t = TRANSLATIONS[lang as keyof typeof TRANSLATIONS];
 
   const NavButton = ({ id, label, onClick }: { id: string, label: string, onClick: () => void }) => {
     const isActive = activeSection === id;
