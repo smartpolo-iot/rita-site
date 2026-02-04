@@ -104,29 +104,38 @@ const App: React.FC = () => {
       </div>
 
       <div className="flex-grow w-full pt-[104px] lg:pt-[80px]">
-        <section id="home" ref={homeRef} className="relative h-[85vh] flex flex-col items-center justify-center text-center p-6 bg-cover bg-center" style={{ backgroundImage: 'url("https://scontent.faep24-2.fna.fbcdn.net/v/t39.30808-6/618641053_906678711754749_5075242416977898605_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&oh=00_AfsX0cNeGXzyFujaO40WjORt3vJXNoBtvKPV__WPUDxOdA&oe=6987F665")' }}>
-          <div className="absolute inset-0 bg-black/40"></div>
-          <div className="relative z-10">
-            <h2 className="text-7xl md:text-[14rem] font-revoxa leading-none text-white tracking-tighter">{t.heroTitle}</h2>
-            <p className="text-[10px] md:text-sm font-category tracking-[0.4em] uppercase text-white/90 font-bold">{t.heroSubtitle}</p>
+        <section
+          id="home"
+          ref={homeRef}
+          className="relative h-[85vh] md:h-screen min-h-[600px] flex flex-col items-center justify-center text-center p-6 bg-cover bg-center transition-opacity duration-1000"
+          style={{
+            backgroundImage: 'url("https://scontent.faep24-2.fna.fbcdn.net/v/t39.30808-6/618641053_906678711754749_5075242416977898605_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeE1_QVr0e2Sntye-7s5NYs0TmTrlwOO3gFOZOuXA47eAZuhQXID9XaPL-DSBZqGZyA&_nc_ohc=Wy51qG3OD8EQ7kNvwH9V3Al&_nc_oc=Adn8yUE1UE0t9ms_OceyPJCI81hsAfI65u50nKaM0ejFKCPe4KCgs-mVuM4exnmsCGw&_nc_zt=23&_nc_ht=scontent.faep24-2.fna&_nc_gid=hcy7JXUj9V7Ccrfdh9lBOA&oh=00_AfsX0cNeGXzyFujaO40WjORt3vJXNoBtvKPV__WPUDxOdA&oe=6987F665")'
+          }}
+        >
+          <div className="absolute inset-0 bg-black/40 z-0"></div>
+          <div className="relative z-10 animate-in fade-in zoom-in duration-1000">
+            <h2 className="text-7xl md:text-[14rem] font-revoxa leading-none text-white tracking-tighter drop-shadow-2xl">{t.heroTitle}</h2>
+            <p className="text-[10px] md:text-sm font-category tracking-[0.4em] uppercase text-white/90 font-bold drop-shadow-lg">{t.heroSubtitle}</p>
           </div>
         </section>
 
         <section id="about" ref={aboutRef} className="py-24 px-6 max-w-4xl mx-auto text-center">
           <h3 className="text-[10px] font-category font-bold tracking-[0.5em] uppercase opacity-30 mb-8">{t.aboutTitle}</h3>
-          <p className="text-xl md:text-4xl font-lexend font-light text-[#39322c]">{t.aboutText}</p>
+          <p className="text-xl md:text-4xl font-lexend font-light text-[#39322c] leading-snug">{t.aboutText}</p>
         </section>
 
         <section id="branches" ref={branchesRef} className="py-24 px-6 max-w-7xl mx-auto">
           <h3 className="text-[10px] font-category font-bold tracking-[0.5em] uppercase opacity-30 text-center mb-16">{t.branchesTitle}</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {BRANCHES_DATA.map((branch, i) => (
-              <div key={i} className="bg-white border border-[#211d1c]/5 overflow-hidden group">
-                <div className="aspect-[16/10] overflow-hidden"><img src={branch.imageUrl} alt={branch.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" /></div>
+              <div key={i} className="bg-white border border-[#211d1c]/5 overflow-hidden group shadow-sm hover:shadow-xl transition-shadow duration-500">
+                <div className="aspect-[16/10] overflow-hidden">
+                  <img src={branch.imageUrl} alt={branch.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                </div>
                 <div className="p-8">
                   <h4 className="text-xl font-antonio font-bold uppercase mb-1 text-[#211d1c]">📍 {branch.name}</h4>
-                  <p className="text-sm opacity-60 mb-4">{branch.address}</p>
-                  <p className="text-[10px] font-bold opacity-30 uppercase">{t.hoursTitle}</p>
+                  <a href={branch.mapUrl} target="_blank" rel="noopener noreferrer" className="text-sm opacity-60 mb-4 block hover:opacity-100 transition-opacity underline-offset-4 hover:underline">{branch.address}</a>
+                  <p className="text-[10px] font-bold opacity-30 uppercase mt-4">{t.hoursTitle}</p>
                   <p className="text-[11px] opacity-60">{t.hoursValue}</p>
                 </div>
               </div>
@@ -136,13 +145,17 @@ const App: React.FC = () => {
 
         <section id="contact" ref={contactRef} className="py-24 px-6 bg-[#211d1c] text-[#efdecc] text-center">
           <h3 className="text-[10px] font-category font-bold tracking-[0.5em] uppercase opacity-30 mb-8">{t.contactTitle}</h3>
-          <p className="text-xl md:text-3xl font-lexend max-w-2xl mx-auto mb-16 opacity-80">{t.contactText}</p>
-          <div className="flex justify-center gap-12 font-antonio font-bold text-xl tracking-widest">
-            <a href="https://www.instagram.com/ritaspecialtycoffee/" target="_blank" rel="noopener noreferrer" className="hover:opacity-50">INSTAGRAM</a>
-            <a href="https://wa.me/yourwhatsapplink" target="_blank" rel="noopener noreferrer" className="hover:opacity-50">WHATSAPP</a>
+          <p className="text-xl md:text-3xl font-lexend max-w-2xl mx-auto mb-16 opacity-80 font-light">{t.contactText}</p>
+          <div className="flex flex-wrap justify-center gap-8 md:gap-16 font-antonio font-bold text-xl md:text-2xl tracking-widest">
+            <a href="https://www.instagram.com/ritaspecialtycoffee/" target="_blank" rel="noopener noreferrer" className="hover:opacity-50 transition-opacity border-b border-transparent hover:border-[#efdecc]">INSTAGRAM</a>
+            <a href="https://wa.me/yourwhatsapplink" target="_blank" rel="noopener noreferrer" className="hover:opacity-50 transition-opacity border-b border-transparent hover:border-[#efdecc]">WHATSAPP</a>
           </div>
         </section>
       </div>
+
+      <footer className="p-12 text-center border-t border-[#211d1c]/5 bg-white/5 opacity-40">
+        <p className="text-[10px] font-bold tracking-[0.3em] uppercase">RITA Specialty Coffee &copy; {new Date().getFullYear()}</p>
+      </footer>
 
       {showReviews && <ReviewsModal lang={lang} onClose={() => setShowReviews(false)} />}
     </div>

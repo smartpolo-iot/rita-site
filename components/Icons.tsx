@@ -1,106 +1,220 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Language, Review } from '../types';
+import { TRANSLATIONS, REVIEWS_API_URL, MOCK_REVIEWS } from '../constants';
 
-interface IconProps {
-  category: string;
-  className?: string;
+interface Props {
+  lang: Language;
+  onClose: () => void;
 }
 
-export const normalizeStr = (str: string) =>
-  str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim();
+const STORAGE_KEY = 'rita_custom_reviews';
 
-export const CategoryIcon: React.FC<IconProps> = ({ category, className = "h-6 w-6" }) => {
-  const norm = normalizeStr(category);
-  const stroke = "currentColor";
-  const sWidth = "1.5";
+const ReviewsModal: React.FC<Props> = ({ lang, onClose }) => {
+  const t = TRANSLATIONS[lang as keyof typeof TRANSLATIONS];
+  const [reviews, setReviews] = useState<Review[]>(MOCK_REVIEWS);
+  const [showForm, setShowForm] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Specific check for "TO GO" / "LLEVAR" coffee
-  if (norm.includes('LLEVAR') || norm.includes('TO GO')) {
-    return (
-      <svg className={className} fill="none" viewBox="0 0 24 24" stroke={stroke} strokeWidth={sWidth}>
-        {/* Cup Body */}
-        <path d="M17 8L15.5 21H8.5L7 8" />
-        {/* Lid */}
-        <path d="M6 8H18L17.5 5H6.5L6 8Z" />
-        {/* Lid Top Detail */}
-        <path d="M10 3H14" />
-      </svg>
-    );
-  }
+  // Form state
+  const [newRating, setNewRating] = useState(5);
+  const [newComment, setNewComment] = useState('');
+  const [newName, setNewName] = useState('');
+  const [receiptCode, setReceiptCode] = useState('');
 
-  if (norm.includes('CAFE')) {
-    return (
-      <svg className={className} fill="none" viewBox="0 0 24 24" stroke={stroke} strokeWidth={sWidth}>
-        <path d="M17 8h1a4 4 0 110 8h-1M3 8h14v9a4 4 0 01-4 4H7a4 4 0 01-4-4V8z" />
-        <path d="M6 2v2M10 2v2M14 2v2" />
-      </svg>
-    );
-  }
-  if (norm.includes('ESPECIALES')) {
-    return (
-      <svg className={className} fill="none" viewBox="0 0 24 24" stroke={stroke} strokeWidth={sWidth}>
-        <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.54 1.118l-3.976-2.888a1 1 0 00-1.175 0l-3.976 2.888c-.784.57-1.838-.196-1.539-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-      </svg>
-    );
-  }
-  if (norm.includes('BEBIDAS')) {
-    return (
-      <svg className={className} fill="none" viewBox="0 0 24 24" stroke={stroke} strokeWidth={sWidth}>
-        <path d="M6 3h12l-1 15a2 2 0 01-2 2H9a2 2 0 01-2-2L6 3z" />
-        <path d="M6 7h12M12 20V10" />
-      </svg>
-    );
-  }
-  if (norm.includes('TE')) {
-    return (
-      <svg className={className} fill="none" viewBox="0 0 24 24" stroke={stroke} strokeWidth={sWidth}>
-        <path d="M12 3v11a4 4 0 004 4h1a3 3 0 000-6h-1a2 2 0 01-2-2V3z" />
-        <path d="M12 11h.01M9 11h.01M6 11h.01" />
-      </svg>
-    );
-  }
-  if (norm.includes('DESAYUNA')) {
-    return (
-      <svg className={className} fill="none" viewBox="0 0 24 24" stroke={stroke} strokeWidth={sWidth}>
-        <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-      </svg>
-    );
-  }
-  if (norm.includes('ALMORZA')) {
-    return (
-      <svg className={className} fill="none" viewBox="0 0 24 24" stroke={stroke} strokeWidth={sWidth}>
-        <path d="M7 2v10M10 2v10M4 2v10M7 12v10M17 2v10a3 3 0 01-3 3h-1v7" />
-      </svg>
-    );
-  }
-  if (norm.includes('BRUNCHEA')) {
-    return (
-      <svg className={className} fill="none" viewBox="0 0 24 24" stroke={stroke} strokeWidth={sWidth}>
-        <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-        <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
-      </svg>
-    );
-  }
-  if (norm.includes('SALADOS')) {
-    return (
-      <svg className={className} fill="none" viewBox="0 0 24 24" stroke={stroke} strokeWidth={sWidth}>
-        <path d="M3 18c1.5-2 3-3 9-3s7.5 1 9 3v1H3v-1z" />
-        <path d="M6 15c0-4 3-7 6-7s6 3 6 7" />
-        <path d="M12 8V4m0 0a1 1 0 110-2 1 1 0 010 2z" />
-      </svg>
-    );
-  }
-  if (norm.includes('DULCES') || norm.includes('PASTELERIA')) {
-    return (
-      <svg className={className} fill="none" viewBox="0 0 24 24" stroke={stroke} strokeWidth={sWidth}>
-        <path d="M20 21H4a2 2 0 01-2-2V9a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2z" />
-        <path d="M2 13h20M12 7V3" />
-      </svg>
-    );
-  }
+  const loadReviews = async () => {
+    setIsLoading(true);
+    try {
+      if (REVIEWS_API_URL) {
+        const response = await fetch(REVIEWS_API_URL);
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          setReviews([...data, ...MOCK_REVIEWS]);
+          setIsLoading(false);
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn("API Fetch failed, using local fallback");
+    }
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        setReviews([...parsed, ...MOCK_REVIEWS]);
+      } catch (e) {
+        setReviews(MOCK_REVIEWS);
+      }
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    loadReviews();
+  }, []);
+
+  const isCodeValid = /^\d{8}$/.test(receiptCode);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isCodeValid || isSaving) return;
+
+    setIsSaving(true);
+
+    const newReview: Review = {
+      id: Date.now().toString(),
+      author: newName || 'Anónimo',
+      rating: newRating,
+      comment: newComment,
+      date: new Date().toLocaleDateString('en-CA'),
+      isVerified: true
+    };
+
+    try {
+      if (REVIEWS_API_URL) {
+        await fetch(REVIEWS_API_URL, {
+          method: 'POST',
+          body: JSON.stringify(newReview),
+        });
+      } else {
+        await new Promise(resolve => setTimeout(resolve, 800));
+      }
+
+      setReviews([newReview, ...reviews]);
+      const saved = localStorage.getItem(STORAGE_KEY);
+      const customReviews = saved ? JSON.parse(saved) : [];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([newReview, ...customReviews]));
+
+      setShowForm(false);
+      setNewComment('');
+      setNewName('');
+      setReceiptCode('');
+      setNewRating(5);
+    } catch (error) {
+      alert(lang === 'es' ? 'Error al guardar.' : 'Error saving.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const avgRating = (reviews.length > 0
+    ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)
+    : "5.0");
+
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke={stroke} strokeWidth={sWidth}>
-      <path d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
+    <div className="fixed inset-0 z-[100] bg-[#39322c]/60 backdrop-blur-md flex items-center justify-center p-0 md:p-4 animate-in fade-in duration-300">
+      <div className="bg-[#efdecc] w-full max-w-2xl h-full md:h-auto md:max-h-[92vh] shadow-2xl flex flex-col overflow-hidden border-x-0 md:border-2 border-[#39322c]">
+        {/* Header */}
+        <div className="p-6 md:p-8 border-b-2 border-[#39322c] flex items-center justify-between bg-white">
+          <div>
+            <h2 className="text-4xl font-antonio font-bold text-[#39322c] uppercase tracking-tighter leading-none">{t.reviews}</h2>
+            <div className="flex items-center gap-3 mt-2">
+              <span className="text-2xl font-antonio font-bold text-[#39322c]">{avgRating}</span>
+              <div className="flex text-[#39322c] text-sm">
+                {[...Array(5)].map((_, i) => (
+                  <span key={i} className={i < Math.round(Number(avgRating)) ? 'opacity-100' : 'opacity-20'}>★</span>
+                ))}
+              </div>
+              <span className="text-[10px] font-bold text-[#39322c]/40 uppercase tracking-[0.2em]">({reviews.length})</span>
+            </div>
+          </div>
+          <button onClick={onClose} className="w-10 h-10 border-2 border-[#39322c] flex items-center justify-center text-[#39322c] text-2xl active:scale-95">&times;</button>
+        </div>
+
+        {/* Content */}
+        <div className="flex-grow overflow-y-auto p-6 md:p-8 space-y-8">
+          {showForm ? (
+            <form onSubmit={handleSubmit} className="bg-white border-2 border-[#39322c] p-6 space-y-6 shadow-[6px_6px_0px_0px_rgba(57,50,44,1)]">
+              <div className="flex justify-between items-center border-b border-[#39322c]/10 pb-4">
+                <h3 className="font-antonio font-bold text-lg uppercase tracking-widest text-[#39322c]">
+                  {lang === 'es' ? 'VALIDAR TICKET' : 'VALIDATE TICKET'}
+                </h3>
+                <button type="button" onClick={() => setShowForm(false)} className="text-[#39322c] text-[10px] font-bold uppercase tracking-widest border-b border-[#39322c]">
+                  {lang === 'es' ? 'CANCELAR' : 'CANCEL'}
+                </button>
+              </div>
+
+              <div className="flex gap-4 justify-center py-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button key={star} type="button" onClick={() => setNewRating(star)} className={`text-4xl ${newRating >= star ? 'opacity-100' : 'opacity-20'}`}>★</button>
+                ))}
+              </div>
+
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    placeholder={lang === 'es' ? 'NOMBRE' : 'NAME'}
+                    className="w-full px-4 py-3 border-2 border-[#39322c]/20 bg-[#efdecc]/5 focus:outline-none focus:border-[#39322c]"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    required
+                  />
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={8}
+                    placeholder={lang === 'es' ? 'CÓDIGO TICKET (8 DÍGITOS)' : 'TICKET CODE (8 DIGITS)'}
+                    className="w-full px-4 py-3 border-2 border-[#39322c]/20 bg-[#efdecc]/5 focus:outline-none focus:border-[#39322c]"
+                    value={receiptCode}
+                    onChange={(e) => setReceiptCode(e.target.value.replace(/\D/g, ''))}
+                    required
+                  />
+                </div>
+                <textarea
+                  placeholder={lang === 'es' ? 'TU COMENTARIO' : 'YOUR COMMENT'}
+                  className="w-full px-4 py-3 border-2 border-[#39322c]/20 bg-[#efdecc]/5 focus:outline-none focus:border-[#39322c] min-h-[100px]"
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={!isCodeValid || !newComment || !newName || isSaving}
+                className="w-full py-5 bg-[#39322c] text-[#efdecc] font-antonio font-bold text-xl uppercase tracking-[0.2em] disabled:opacity-20"
+              >
+                {isSaving ? (lang === 'es' ? 'GUARDANDO...' : 'SAVING...') : (lang === 'es' ? 'PUBLICAR' : 'POST')}
+              </button>
+            </form>
+          ) : (
+            <button
+              onClick={() => setShowForm(true)}
+              className="w-full py-10 border border-[#39322c]/20 text-[#39322c] flex flex-col items-center justify-center hover:bg-white/10"
+            >
+              <span className="font-antonio font-bold text-3xl uppercase tracking-widest mb-1">+ {lang === 'es' ? 'ESCRIBIR RESEÑA' : 'WRITE A REVIEW'}</span>
+              <span className="text-[10px] font-bold uppercase tracking-[0.4em] opacity-40">{lang === 'es' ? 'SE REQUIERE TICKET' : 'RECEIPT REQUIRED'}</span>
+            </button>
+          )}
+
+          <div className="space-y-6 pb-12">
+            {reviews.map((r) => (
+              <div key={r.id} className="p-6 border border-[#39322c]/20">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-antonio font-bold text-[#39322c] text-xl uppercase tracking-tight">{r.author}</span>
+                      {r.isVerified && <span className="bg-[#39322c] text-[#efdecc] text-[8px] font-bold px-1.5 py-0.5 uppercase tracking-widest font-antonio">VERIFICADO</span>}
+                    </div>
+                    <div className="flex text-[#39322c] text-[10px]">
+                      {[...Array(5)].map((_, i) => (
+                        <span key={i} className={i < r.rating ? 'opacity-100' : 'opacity-10'}>★</span>
+                      ))}
+                    </div>
+                  </div>
+                  <span className="text-[9px] text-[#39322c]/30 font-bold uppercase tracking-widest">{r.date}</span>
+                </div>
+                <p className="text-[#39322c]/80 leading-relaxed text-sm italic">"{r.comment}"</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
+
+export default ReviewsModal;

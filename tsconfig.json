@@ -14,23 +14,22 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "baseUrl": ".",
     "types": [
       "vite/client"
     ]
   },
   "include": [
-    "App.tsx",
     "index.tsx",
+    "App.tsx",
     "types.ts",
     "constants.ts",
-    "components/**/*.tsx",
-    "components/**/*.ts",
-    "services/**/*.ts"
+    "components/ReviewsModal.tsx"
   ],
   "exclude": [
     "node_modules",
