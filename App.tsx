@@ -138,8 +138,8 @@ const App: React.FC = () => {
           <h3 className="text-[10px] font-category font-bold tracking-[0.5em] uppercase opacity-30 mb-8">{t.contactTitle}</h3>
           <p className="text-xl md:text-3xl font-lexend max-w-2xl mx-auto mb-16 opacity-80">{t.contactText}</p>
           <div className="flex justify-center gap-12 font-antonio font-bold text-xl tracking-widest">
-            <a href="#" className="hover:opacity-50">INSTAGRAM</a>
-            <a href="#" className="hover:opacity-50">WHATSAPP</a>
+            <a href="https://www.instagram.com/ritaspecialtycoffee/" target="_blank" rel="noopener noreferrer" className="hover:opacity-50">INSTAGRAM</a>
+            <a href="https://wa.me/yourwhatsapplink" target="_blank" rel="noopener noreferrer" className="hover:opacity-50">WHATSAPP</a>
           </div>
         </section>
       </div>
